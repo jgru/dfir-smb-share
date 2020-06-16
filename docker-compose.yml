@@ -1,0 +1,23 @@
+version: '3.3'
+services:
+  smb:
+    build: ./smb-docker
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - ${SHARE}:/data
+  dhcp:
+    image: networkboot/dhcpd
+    network_mode: "host"
+    volumes:
+      - ./dhcpd-docker/data:/data
+    command: ${IFACE}
+
+  observer:
+    build: ./observer-docker
+    volumes:
+      - ${SHARE}:/watchdir
+      - ${WORKDIR}:/workdir
+    environment:
+      - hash=${HASH}
