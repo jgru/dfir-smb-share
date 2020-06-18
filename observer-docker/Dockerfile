@@ -6,7 +6,7 @@ MAINTAINER J4n 6ru <j4n6ru@gmail.com>
 ## Install packages
 RUN apt-get update \
     && apt-get -y upgrade \
-    && apt-get install -y openssl curl inotify-tools libdigest-sha-perl
+    && apt-get install -y openssl curl inotify-tools libdigest-sha-perl rsync
 
 
 COPY observe.sh /

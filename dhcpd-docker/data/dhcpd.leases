@@ -4,5 +4,25 @@
 # authoring-byte-order entry is generated, DO NOT DELETE
 authoring-byte-order little-endian;
 
-server-duid "\000\001\000\001&{G\273\012\000'\000\000\001";
+lease 192.168.57.2 {
+  starts 2 2020/06/16 10:07:34;
+  ends 2 2020/06/16 11:07:34;
+  tstp 2 2020/06/16 11:07:34;
+  cltt 2 2020/06/16 10:07:34;
+  binding state free;
+  hardware ethernet 08:00:27:69:aa:d9;
+  uid "\001\010\000'i\252\331";
+  set vendor-class-identifier = "MSFT 5.0";
+}
+lease 192.168.57.3 {
+  starts 3 2020/06/17 15:56:57;
+  ends 3 2020/06/17 16:56:57;
+  tstp 3 2020/06/17 16:56:57;
+  cltt 3 2020/06/17 15:56:57;
+  binding state free;
+  hardware ethernet 08:00:27:8c:e6:94;
+  uid "\001\010\000'\214\346\224";
+  set vendor-class-identifier = "MSFT 5.0";
+}
+server-duid "\000\001\000\001&}\271\356\012\000'\000\000\001";
 

@@ -12,24 +12,23 @@ observe(){
     # -r = recursively
     # -e = specify kind of events; here: move and create
     # --format '%w%f' prints path to the file (%w) and the filename (%f), that changed
-    inotifywait -m -r -e close_write --format '%w%f' "${watch_dir}" | while read f
+    inotifywait -m -r -e close_write --format "%w%f" ${watch_dir} | while read f
     do
 	if [[ -f $f ]];
 	then
+	    # Retrieve filename with suffix
 	    fn=${f#$(dirname ${f})/}
-	    # Echo filename
-	    #echo "${fn} close_write"
 
 	    # Ignore dot files
 	    if ! [[ "$fn" =~ ^\..* ]];
 	    then
-		# Ignore files with suffix .${hash}
+		# Ignore files with suffix hash and tsr
 		if ! [[ $fn =~ .*\.($suf|$tsr)$ ]];
 		then
 		    # Calculate hash sum
 		    eval ${hashsum} $f > "${f}.${suf}";
-		    create_working_copy "${f}.${suf}"
 		    create_working_copy "${f}"
+		    create_working_copy "${f}.${suf}"
 		elif ! [[ $fn =~ .*\.($tsr)$ ]];
 		     then
 			 # Create openssl timestamp request by taking the hash of the hash file
@@ -51,22 +50,18 @@ create_working_copy(){
     local dhash=""
     local src=$1
     local shash=$(eval ${hashsum} ${src} | awk '{print $1}')
-
-    # Make sure, that hashes of src and dst match, otherwise retry
-    while [[ ${dhash} != ${shash} ]]
-    do
-	dhash=$(hcopy ${src})
-    done;
+    echo "Copying ${src} to workdir"
+    dhash=$(hsync ${src})
 }
 
-hcopy() {
+hsync() {
     local src=$1
     local rel_path=${src#${watch_dir}}
     local dst=${work_dir}${rel_path}
 
     #echo "Creating dir: $(dirname ${dst}) and starting copy"
     mkdir -p $(dirname ${dst})
-    cp ${src} ${dst}
+    rsync -a ${src} ${dst}
 
     # Return hash of copied file
     local result_hash=$(eval ${hashsum} ${dst} | awk '{print $1}')

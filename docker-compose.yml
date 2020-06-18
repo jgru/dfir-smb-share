@@ -17,7 +17,7 @@ services:
   observer:
     build: ./observer-docker
     volumes:
-      - ${SHARE}:/watchdir
-      - ${WORKDIR}:/workdir
+      - ${WATCHDIR}:/watchdir
+      - ${WORKDIR}:/workdir #${WORKDIR}:/workdir
     environment:
       - hash=${HASH}
