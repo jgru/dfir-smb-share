@@ -1,7 +1,8 @@
 #!/bin/bash
 
-TSA="https://freetsa.org/tsr"
-#TSA="https://zeitstempel.dfn.de"
+TSA="https://zeitstempel.dfn.de"
+#TSA="https://freetsa.org/tsr"
+
 tsr="tsr"
 
 observe(){
