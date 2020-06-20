@@ -28,19 +28,18 @@ observe(){
 		then
 		    # Calculate hash sum
 		    eval ${hashsum} $f > "${f}.${suf}";
+
+		    # Create openssl timestamp request by taking the hash of file
+		    # See: https://books.google.cz/books?id=pgYvDwAAQBAJ&printsec=frontcover&hl=cs&source=gbs_ge_summary_r&cad=0#v=onepage&q=openssl&f=false
+		    # Pipe it to curl to submit b/m request to timestamping authoriy
+		    openssl ts -query -data $f -cert| \
+			curl -s -H "Content-Type: application/timestamp-query" --data-binary @- \
+			     "$TSA" > "${f}.${tsr}"
+
+		    # Initiate copy to work_dir after checksum and timestamp are created
 		    create_working_copy "${f}"
 		    create_working_copy "${f}.${suf}"
-		elif ! [[ $fn =~ .*\.($tsr)$ ]];
-		     then
-			 # Create openssl timestamp request by taking the hash of the hash file
-			 # See: https://books.google.cz/books?id=pgYvDwAAQBAJ&printsec=frontcover&hl=cs&source=gbs_ge_summary_r&cad=0#v=onepage&q=openssl&f=false
-			 # Pipe it to curl to submit b/m request to timestamping authoriy
-			 openssl ts -query -data $f -cert| \
-			     curl -s -H "Content-Type: application/timestamp-query" --data-binary @- \
-				  "$TSA" > $f.$tsr
-
-			 # Initiate copy to work_dir after checksum and timestamp are created
-			 create_working_copy "${f}.${tsr}"
+		    create_working_copy "${f}.${tsr}"
 		fi
 	    fi
 	fi
