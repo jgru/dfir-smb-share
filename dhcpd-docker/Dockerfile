@@ -1,7 +1,7 @@
 FROM debian:buster-slim
 
 ## Dockerfile author
-MAINTAINER J4n &ru <j4n6ru@gmail.com>
+MAINTAINER j4n6ru <j4n6ru@gmail.com>
 
 ## Install packages
 RUN apt-get update \

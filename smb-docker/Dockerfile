@@ -9,15 +9,17 @@ RUN apt-get upgrade && \
     addgroup smb && \
     useradd -G smb smbuser
 
-COPY smb.conf /etc/samba/smb.conf
-RUN mkdir /data
+# Copy smb.conf (will be bind mounted late, however)
+COPY /etc/samba/smb.conf /etc/samba/smb.conf
+# Create the directories for the shares
+RUN mkdir /evidence
+RUN mkdir /tools
 
 EXPOSE 137/udp 138/udp 139 445
 
 HEALTHCHECK --interval=60s --timeout=15s \
 	    CMD smbclient -L \\localhost -U % -m SMB3
 
-VOLUME ["/data", "/etc", "/var/cache/samba", "/var/lib/samba", "/var/log/samba",\
-	    "/run/samba"]
+VOLUME ["/evidence", "/tools", "/etc"]
 
 ENTRYPOINT service smbd start && tail -F /var/log/samba/log.smbd

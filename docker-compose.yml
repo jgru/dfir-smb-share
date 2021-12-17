@@ -1,19 +1,19 @@
-version: '3.3'
+version: '3.8'
 services:
   smb:
     build: ./smb-docker
-    ports:
-      - "139:139"
-      - "445:445"
     volumes:
       - ${SHARE}:/data
-      - ${TOOLKIT}:/ro
+      - ${TOOLKIT}:/tools
+      - ./smb-docker/etc/samba:/etc/samba
+    network_mode: "host"
+
   dhcp:
     image: networkboot/dhcpd
-    network_mode: "host"
     volumes:
       - ./dhcpd-docker/data:/data
     command: ${IFACE}
+    network_mode: host
 
   observer:
     build: ./observer-docker
@@ -22,3 +22,4 @@ services:
       - ${WORKDIR}:/workdir #${WORKDIR}:/workdir
     environment:
       - hash=${HASH}
+    network_mode: host
