@@ -7,7 +7,28 @@ For this purpose, three services - DHCPD, SMBD and a service for monitoring the 
 
 Thus, the simple command docker-compose up can start the DFIR-SMB share, after which the integrity for all newly created files is automatically documented in the specified directory and made available as a network drive and the respective file is given a cryptographic time stamp. Using inotifywait, a copy is also created in a directory to be specified on the examination system for immediate further examination, which takes place on a duplicate.
 
-** Checking the TSR
+** Usage
+
+*** Prerequisites
+Please note that you need a working Docker container runtime and the utility [[https://github.com/docker/compose][docker-compose]]. Furthermore, Docker's [[https://docs.docker.com/network/network-tutorial-host/][host network permissions]] need to be available on the platform.
+
+*** Usage
+In order to use the setup, the following modifications will be needed:
+- Modify the [[file:.env][.env]]-file to...
+  - Adapt the file paths to your host's environment
+  - Set the right interface (e.g. an Host-only networking interface of VirtualBox for trying the setup)
+- If you need to change the interface name, then you have to change the file [[file:dhcpd-docker/data/dhcpd.conf][dhcpd.conf]] as well.
+  - Ensure that all occurences of the NIC's name in that file are replaced with the new one
+  - Modify the IP-addresses and address ranges to match the NIC's configuration
+  - The NIC has to be configured appropriately (Modify it with =ip addr add ...= beforehand)
+
+After those modifications start the containers via:
+#+begin_src shell
+docker-compose up
+#+end_src
+
+
+*** Checking the TSR
 #+begin_src sh
 openssl ts -query -data hash.log -cert | curl -s -H "Content-Type: application/timestamp-query" --data-binary @- 'https://zeitstempel.dfn.de/' > hash.log.tsr
 openssl ts -reply -in hash.log.tsr -text
