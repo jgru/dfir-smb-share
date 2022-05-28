@@ -27,7 +27,34 @@ After those modifications start the containers via:
 docker-compose up
 #+end_src
 
-
+If everything is working, you should see the following output:
+#+begin_example
+Starting dfir-smb-share_dhcp_1     ... done
+Starting dfir-smb-share_smb_1      ... done
+Starting dfir-smb-share_observer_1 ... done
+Attaching to dfir-smb-share_dhcp_1, dfir-smb-share_observer_1, dfir-smb-share_smb_1
+dhcp_1      | usermod: no changes
+dhcp_1      | You must add the 'docker run' option '--net=host' if you want to provide DHCP service to the host network.
+observer_1  | Setting up watches.  Beware: since -r was given, this may take a while!
+dhcp_1      | Internet Systems Consortium DHCP Server 4.4.1
+dhcp_1      | Copyright 2004-2018 Internet Systems Consortium.
+dhcp_1      | All rights reserved.
+dhcp_1      | For info, please visit https://www.isc.org/software/dhcp/
+observer_1  | Watches established.
+dhcp_1      | Config file: /data/dhcpd.conf
+dhcp_1      | Database file: /data/dhcpd.leases
+dhcp_1      | PID file: /var/run/dhcpd.pid
+dhcp_1      | Wrote 0 leases to leases file.
+dhcp_1      | Listening on LPF/vboxnet0/0a:00:27:00:00:00/192.168.56.0/24
+dhcp_1      | Sending on   LPF/vboxnet0/0a:00:27:00:00:00/192.168.56.0/24
+dhcp_1      | Sending on   Socket/fallback/fallback-net
+dhcp_1      | Server starting service.
+smb_1       | Starting SMB/CIFS daemon: smbd.
+smb_1       | [2022/05/28 06:51:02.373389,  0] ../lib/util/become_daemon.c:138(daemon_ready)
+smb_1       |   daemon_ready: STATUS=daemon 'smbd' finished starting up and ready to serve connections
+smb_1       | [2022/05/28 07:01:40.688163,  0] ../lib/util/become_daemon.c:138(daemon_ready)
+smb_1       |   daemon_ready: STATUS=daemon 'smbd' finished starting up and ready to serve connections
+#+end_example
 *** Checking the TSR
 #+begin_src sh
 openssl ts -query -data hash.log -cert | curl -s -H "Content-Type: application/timestamp-query" --data-binary @- 'https://zeitstempel.dfn.de/' > hash.log.tsr
