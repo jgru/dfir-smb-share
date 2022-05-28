@@ -55,6 +55,9 @@ smb_1       |   daemon_ready: STATUS=daemon 'smbd' finished starting up and read
 smb_1       | [2022/05/28 07:01:40.688163,  0] ../lib/util/become_daemon.c:138(daemon_ready)
 smb_1       |   daemon_ready: STATUS=daemon 'smbd' finished starting up and ready to serve connections
 #+end_example
+
+(Since =network_mode: host= is specified in [[file:docker-compose.yml][docker-compose.yml]] you can ignote the warning regarding ='--net=host'=.)
+
 *** Checking the TSR
 #+begin_src sh
 openssl ts -query -data hash.log -cert | curl -s -H "Content-Type: application/timestamp-query" --data-binary @- 'https://zeitstempel.dfn.de/' > hash.log.tsr
